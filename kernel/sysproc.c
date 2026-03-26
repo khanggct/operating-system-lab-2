@@ -91,3 +91,20 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64 sys_settag(void)
+{
+  int tag;
+  argint(0, &tag);
+  myproc()->tag = tag;
+  printf("process %d set tag = %d\n", myproc()->pid, tag);
+  return 0;
+}
+
+uint64 sys_trace(void)
+{
+  int mask;
+  argint(0, &mask);
+  myproc()->mask = mask;
+  return 0;
+}

@@ -194,6 +194,9 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
+	$U/_testsettag\
+	$U/_test\
+	$U/_trace\
 
 
 
