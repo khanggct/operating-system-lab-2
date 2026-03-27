@@ -700,19 +700,21 @@ procdump(void)
 
 // User-define
 // Find all process that has non-UNUSED state
-// Return the number of found process
+// Return the number of process found
 int ptree_helper (struct ptreeinfo* ptreeinfo, int max)
 {
   struct proc *p;
   int idx = 0;
   for(p = proc; p < &proc[NPROC]; p++) {
-    if (p->state == UNUSED)
-      continue;
-    ptreeinfo[idx].pid     = p->pid;
-    ptreeinfo[idx].ppid    = (p->parent) ? p->parent->pid : -1;
-    ptreeinfo[idx].state   = p->state;
-    ptreeinfo[idx].memsize = p->sz;
-    safestrcpy(ptreeinfo[idx].name, p->name, sizeof(p->name));
+    acquire(&p->lock);
+    if (p->state != UNUSED) {
+      ptreeinfo[idx].pid     = p->pid;
+      ptreeinfo[idx].ppid    = (p->parent) ? p->parent->pid : -1;
+      ptreeinfo[idx].state   = p->state;
+      ptreeinfo[idx].memsize = p->sz;
+      safestrcpy(ptreeinfo[idx].name, p->name, sizeof(p->name));
+    }
+    release(&p->lock);
 
     idx++;
     if (idx >= max)
