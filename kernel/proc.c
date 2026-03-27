@@ -696,3 +696,21 @@ procdump(void)
     printf("\n");
   }
 }
+
+// Function to count the number of active processes (non-UNUSED states)
+uint64
+getnproc(void)
+{
+  struct proc *p;
+  uint64 n = 0;
+
+  for(p = proc; p < &proc[NPROC]; p++) {
+    // Acquire the process lock to safely check its state
+    acquire(&p->lock); 
+    if(p->state != UNUSED) {
+      n++;
+    }
+    release(&p->lock);
+  }
+  return n;
+}

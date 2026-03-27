@@ -80,3 +80,25 @@ kalloc(void)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
 }
+
+// Function to count the number of free memory bytes
+uint64
+getfreemem(void)
+{
+  struct run *r;
+  uint64 n = 0;
+
+  // Lock to prevent other processes from modifying the freelist simultaneously
+  acquire(&kmem.lock); 
+  
+  r = kmem.freelist;
+  while(r){
+    n++;
+    r = r->next;
+  }
+  
+  release(&kmem.lock);
+
+  // Each node in the list represents one page (PGSIZE = 4096 bytes)
+  return n * 4096; 
+}
