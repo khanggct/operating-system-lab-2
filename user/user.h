@@ -1,4 +1,5 @@
 struct stat;
+struct ptreeinfo;
 
 // system calls
 int fork(void);
@@ -24,6 +25,7 @@ int sleep(int);
 int uptime(void);
 int settag(int);
 int trace(int);
+int ptree(struct ptreeinfo*, int);
 
 
 // ulib.c

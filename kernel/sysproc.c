@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "ptree.h"
 
 uint64
 sys_exit(void)
@@ -107,4 +108,24 @@ uint64 sys_trace(void)
   argint(0, &mask);
   myproc()->mask = mask;
   return 0;
+}
+
+int sys_ptree(void)
+{
+  uint64 ubuf;
+  int max;
+  argaddr(0, &ubuf);
+  argint(1, &max);
+  if (max <= 0)
+    return -1;
+
+  if (max > NPROC)
+    max = NPROC;
+  struct ptreeinfo kbuf[NPROC];
+  int cnt = ptree_helper(kbuf, max);
+  if (cnt <= 0)
+    return 0;
+  if (copyout(myproc()->pagetable, ubuf, (char*)kbuf, max*sizeof(struct ptreeinfo)) < 0)
+    return -2;
+  return cnt;
 }

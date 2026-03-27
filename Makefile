@@ -197,6 +197,7 @@ UPROGS=\
 	$U/_testsettag\
 	$U/_test\
 	$U/_trace\
+	$U/_pstree\
 
 
 

@@ -38,3 +38,4 @@ entry("sleep");
 entry("uptime");
 entry("settag");
 entry("trace");
+entry("ptree");
