@@ -39,3 +39,4 @@ entry("uptime");
 entry("settag");
 entry("trace");
 entry("sysinfo");
+entry("ptree");

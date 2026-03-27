@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "ptree.h"
 
 struct cpu cpus[NCPU];
 
@@ -697,6 +698,7 @@ procdump(void)
   }
 }
 
+// User-defined
 // Function to count the number of active processes (non-UNUSED states)
 uint64
 getnproc(void)
@@ -713,4 +715,29 @@ getnproc(void)
     release(&p->lock);
   }
   return n;
+}
+
+// User-defined
+// Find all process that has non-UNUSED state
+// Return the number of process found
+int ptree_helper (struct ptreeinfo* ptreeinfo, int max)
+{
+  struct proc *p;
+  int idx = 0;
+  for(p = proc; p < &proc[NPROC]; p++) {
+    acquire(&p->lock);
+    if (p->state != UNUSED) {
+      ptreeinfo[idx].pid     = p->pid;
+      ptreeinfo[idx].ppid    = (p->parent) ? p->parent->pid : -1;
+      ptreeinfo[idx].state   = p->state;
+      ptreeinfo[idx].memsize = p->sz;
+      safestrcpy(ptreeinfo[idx].name, p->name, sizeof(p->name));
+    }
+    release(&p->lock);
+
+    idx++;
+    if (idx >= max)
+      break;
+  }
+  return idx;
 }
