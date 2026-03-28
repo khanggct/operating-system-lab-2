@@ -6,12 +6,12 @@
 int main(int argc, char** argv) {
 	// Checking valid arguments
 	if (argc <= 3) {
-		printf("trace: requires at least 3 arguments\n");
+		printf("trace: requires at least 2 arguments\n");
 		exit(1);
 	}
-	for (int i = 0; i < strlen(argv[2]); i++) {
-		if (argv[2][i] < '0' || argv[2][i] > '9') {
-			printf("trace: invalid mask\n");
+	for (int i = 0; i < strlen(argv[1]); i++) {
+		if (argv[1][i] < '0' || argv[1][i] > '9') {
+			printf("trace: invalid mask %s\n", argv[1]);
 			exit(1);
 		}
 	}
@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 	}
 	child_argv[child_argc] = 0;
 
-	
+
 	if (fork() == 0) {
 		trace(atoi(argv[1]));
 		close(1);

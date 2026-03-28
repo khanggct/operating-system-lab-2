@@ -27,7 +27,7 @@ void sub_main() {
 	// printf("cnt=%d\n", cnt);
 
 	for (int idx = 0; idx < cnt; idx++) {
-		if (ptri[idx].ppid < 0) { // root process
+		if (ptri[idx].ppid < 0) { // find root process
 			print_process_tree(ptri[idx], 0, ptri, cnt);
 			break;
 		}
@@ -35,11 +35,11 @@ void sub_main() {
 }
 
 int main() {
-	if (fork() == 0) { // creating child process for testing
+	if (fork() == 0) { // creating child process for TESTING
 		exit(0);
 	}
 	else {
-		if (fork() == 0) { // creating child process for testing
+		if (fork() == 0) { // creating child process for TESTING
 			exit(0);
 		}
 		else {
