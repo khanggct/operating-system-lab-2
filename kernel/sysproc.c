@@ -5,11 +5,8 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
-<<<<<<< HEAD
 #include "sysinfo.h"
-=======
 #include "ptree.h"
->>>>>>> lab02-pstree
 
 uint64
 sys_exit(void)
@@ -147,9 +144,13 @@ int sys_ptree(void)
   if (max > NPROC)
     max = NPROC;
   struct ptreeinfo kbuf[NPROC];
+
+  // Collect processes' information from helper function
   int cnt = ptree_helper(kbuf, max);
   if (cnt <= 0)
     return 0;
+
+  // Copy the data from kernel space to user space memory
   if (copyout(myproc()->pagetable, ubuf, (char*)kbuf, max*sizeof(struct ptreeinfo)) < 0)
     return -2;
   return cnt;
